@@ -25,8 +25,7 @@
          */
          var setSong = function(song) {
            if (currentBuzzObject) {
-               currentBuzzObject.stop();
-               SongPlayer.currentSong.playing = null;
+               stopSong(song);
            }
 
            currentBuzzObject = new buzz.sound(song.audioUrl, {
@@ -40,10 +39,21 @@
         /**
         * @function playSong
         * @desc Starts the buzz object and sets song.playing to true
+        * @param {Object} song
         */
         var playSong = function(song) {
           currentBuzzObject.play();
           song.playing = true;
+        };
+
+        /**
+        * @function stopSong
+        * @desc Stops the buzz object and sets song.playing to null
+        * @param {Object} song
+        */
+        var stopSong = function(song) {
+          currentBuzzObject.stop();
+          song.playing = null;
         };
 
         /**
@@ -92,16 +102,14 @@
         /**
         * @function SongPlayer.previous
         * @desc Set the current song to the previous song; if no previous song,
-        * stop playing current song and set the first song as the current song.
-        * @param {Object} song
+        *   stop playing current song and set the first song as the current song.
         */
         SongPlayer.previous = function() {
             var currentSongIndex = getSongIndex(SongPlayer.currentSong);
             currentSongIndex--;
 
             if (currentSongIndex < 0) {
-                currentBuzzObject.stop();
-                SongPlayer.currentSong.playing = null;
+                stopSong(SongPlayer.currentSong);
             } else {
                 var song = currentAlbum.songs[currentSongIndex];
                 setSong(song);
@@ -112,16 +120,14 @@
         /**
         * @function SongPlayer.next
         * @desc Set the current song to the next song; if no next song,
-        * stop playing current song and set the last song as the current song.
-        * @param {Object} song
+        *   stop playing current song and set the last song as the current song.
         */
         SongPlayer.next = function() {
             var currentSongIndex = getSongIndex(SongPlayer.currentSong);
             currentSongIndex++;
 
             if (currentSongIndex >= currentAlbum.songs.length) {
-                currentBuzzObject.stop();
-                SongPlayer.currentSong.playing = null;
+                stopSong(SongPlayer.currentSong);
             } else {
                 var song = currentAlbum.songs[currentSongIndex];
                 setSong(song);
