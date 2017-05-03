@@ -91,7 +91,8 @@
 
         /**
         * @function SongPlayer.previous
-        * @desc Set the current song to the previous song; if no previous song, wrap around to the final song
+        * @desc Set the current song to the previous song; if no previous song,
+        * stop playing current song and set the first song as the current song.
         * @param {Object} song
         */
         SongPlayer.previous = function() {
@@ -99,6 +100,26 @@
             currentSongIndex--;
 
             if (currentSongIndex < 0) {
+                currentBuzzObject.stop();
+                SongPlayer.currentSong.playing = null;
+            } else {
+                var song = currentAlbum.songs[currentSongIndex];
+                setSong(song);
+                playSong(song);
+            }
+        };
+
+        /**
+        * @function SongPlayer.next
+        * @desc Set the current song to the next song; if no next song,
+        * stop playing current song and set the last song as the current song.
+        * @param {Object} song
+        */
+        SongPlayer.next = function() {
+            var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+            currentSongIndex++;
+
+            if (currentSongIndex >= currentAlbum.songs.length) {
                 currentBuzzObject.stop();
                 SongPlayer.currentSong.playing = null;
             } else {
